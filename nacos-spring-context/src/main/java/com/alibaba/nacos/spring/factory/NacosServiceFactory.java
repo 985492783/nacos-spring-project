@@ -22,6 +22,7 @@ import java.util.Properties;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.api.lock.LockService;
 import com.alibaba.nacos.api.naming.NamingMaintainService;
 import com.alibaba.nacos.api.naming.NamingService;
 
@@ -48,6 +49,8 @@ public interface NacosServiceFactory {
 	 * @see NacosFactory#createConfigService(Properties)
 	 */
 	ConfigService createConfigService(Properties properties) throws NacosException;
+	
+	LockService createLockService(Properties properties) throws NacosException;
 
 	/**
 	 * Create {@link NamingService} instance

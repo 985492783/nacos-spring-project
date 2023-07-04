@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 
+import com.alibaba.nacos.api.lock.LockService;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -55,6 +56,9 @@ public class CacheableEventPublishingNacosServiceFactory implements NacosService
 
 	private final Map<String, NamingService> namingServicesCache = new LinkedHashMap<String, NamingService>(
 			2);
+	
+	private final Map<String, LockService> lockServicesCache = new LinkedHashMap<String, LockService>(
+			2);
 
 	private final Map<String, NamingMaintainService> maintainServiceCache = new LinkedHashMap<String, NamingMaintainService>(
 			2);
@@ -72,6 +76,7 @@ public class CacheableEventPublishingNacosServiceFactory implements NacosService
 		createWorkerManager.put(ServiceType.CONFIG, new ConfigCreateWorker());
 		createWorkerManager.put(ServiceType.NAMING, new NamingCreateWorker());
 		createWorkerManager.put(ServiceType.MAINTAIN, new MaintainCreateWorker());
+		createWorkerManager.put(ServiceType.LOCK, new LockCreateWorker());
 		createWorkerManager = Collections.unmodifiableMap(createWorkerManager);
 	}
 
@@ -87,7 +92,15 @@ public class CacheableEventPublishingNacosServiceFactory implements NacosService
 		return (ConfigService) createWorkerManager.get(ServiceType.CONFIG).run(copy,
 				null);
 	}
-
+	
+	@Override
+	public LockService createLockService(Properties properties) throws NacosException {
+		Properties copy = new Properties();
+		copy.putAll(properties);
+		return (LockService) createWorkerManager.get(ServiceType.LOCK).run(copy,
+				null);
+	}
+	
 	@Override
 	public NamingService createNamingService(Properties properties)
 			throws NacosException {
@@ -181,7 +194,8 @@ public class CacheableEventPublishingNacosServiceFactory implements NacosService
 		/**
 		 * Maintain
 		 */
-		MAINTAIN
+		MAINTAIN,
+		LOCK
 
 	}
 
@@ -301,6 +315,25 @@ public class CacheableEventPublishingNacosServiceFactory implements NacosService
 				maintainServiceCache.put(cacheKey, namingMaintainService);
 			}
 			return namingMaintainService;
+		}
+	}
+	
+	class LockCreateWorker extends AbstractCreateWorker<LockService> {
+		
+		@Override
+		public LockService run(Properties properties, LockService service)
+				throws NacosException {
+			String cacheKey = identify(properties);
+			LockService lockService = lockServicesCache.get(cacheKey);
+			
+			if (lockService == null) {
+				if (service == null) {
+					service = NacosFactory.createLockService(properties);
+				}
+				lockService = new DelegatingLockService(service, properties);
+				lockServicesCache.put(cacheKey, lockService);
+			}
+			return lockService;
 		}
 	}
 

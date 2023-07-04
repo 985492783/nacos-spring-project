@@ -20,6 +20,7 @@ package com.alibaba.nacos.spring.context.event.config;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+import com.alibaba.nacos.api.config.filter.IConfigFilter;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -157,7 +158,12 @@ public class EventPublishingConfigService
 	public String getServerStatus() {
 		return configService.getServerStatus();
 	}
-
+	
+	@Override
+	public void addConfigFilter(IConfigFilter configFilter) {
+		configService.addConfigFilter(configFilter);
+	}
+	
 	@Override
 	public void shutDown() throws NacosException {
 		configService.shutDown();

@@ -89,7 +89,7 @@
         </sonar.jacoco.itReportPath>
         <sonar.exclusions>file:**/generated-sources/**,**/test/**</sonar.exclusions>
         <!-- Nacos -->
-        <nacos.version>2.2.1</nacos.version>
+        <nacos.version>2.3.0-SNAPSHOT</nacos.version>
         <!-- Spring -->
         <spring.framework.version>5.2.9.RELEASE</spring.framework.version>
         <snake.yaml.version>1.29</snake.yaml.version>
