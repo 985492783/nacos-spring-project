@@ -19,6 +19,7 @@ package com.alibaba.nacos.spring.util;
 import static com.alibaba.nacos.spring.util.NacosBeanUtils.CONFIG_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
 import static com.alibaba.nacos.spring.util.NacosBeanUtils.DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
 import static com.alibaba.nacos.spring.util.NacosBeanUtils.GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
+import static com.alibaba.nacos.spring.util.NacosBeanUtils.LOCK_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
 import static com.alibaba.nacos.spring.util.NacosBeanUtils.MAINTAIN_GLOBAL_NACOS_PROPERTIES_BEAN_NAME;
 import static com.alibaba.nacos.spring.util.NacosUtils.merge;
 import static java.util.Collections.emptyMap;
@@ -56,7 +57,8 @@ public enum GlobalNacosPropertiesSource {
 	/**
 	 * Global {@link NacosProperties} for Nacos maintain
 	 */
-	MAINTAIN(MAINTAIN_GLOBAL_NACOS_PROPERTIES_BEAN_NAME);
+	MAINTAIN(MAINTAIN_GLOBAL_NACOS_PROPERTIES_BEAN_NAME),
+	LOCK(LOCK_GLOBAL_NACOS_PROPERTIES_BEAN_NAME);
 
 	private final String beanName;
 

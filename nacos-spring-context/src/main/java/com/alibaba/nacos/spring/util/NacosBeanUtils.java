@@ -29,6 +29,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.alibaba.nacos.spring.beans.factory.annotation.LockServiceBeanBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ListableBeanFactory;
@@ -89,7 +90,13 @@ public abstract class NacosBeanUtils {
 	 */
 	public static final String DISCOVERY_GLOBAL_NACOS_PROPERTIES_BEAN_NAME = GLOBAL_NACOS_PROPERTIES_BEAN_NAME
 			+ "$discovery";
-
+	
+	/**
+	 * The bean name of global Nacos {@link Properties} for discovery
+	 */
+	public static final String LOCK_GLOBAL_NACOS_PROPERTIES_BEAN_NAME = GLOBAL_NACOS_PROPERTIES_BEAN_NAME
+			+ "$lock";
+	
 	/**
 	 * The bean name of global Nacos {@link Properties} for maintain
 	 */
@@ -399,10 +406,14 @@ public abstract class NacosBeanUtils {
 		registerNacosValueAnnotationBeanPostProcessor(registry);
 
 		registerConfigServiceBeanBuilder(registry);
+		
+		registryLockServiceBeanBuilder(registry);
 
 		registerLoggingNacosConfigMetadataEventListener(registry);
 	}
-
+	
+	
+	
 	/**
 	 * Invokes {@link NacosPropertySourcePostProcessor}
 	 *
@@ -436,6 +447,11 @@ public abstract class NacosBeanUtils {
 	public static void registerNacosDiscoveryBeans(BeanDefinitionRegistry registry) {
 		registerNamingServiceBeanBuilder(registry);
 		registerNamingMaintainServiceBeanBuilder(registry);
+	}
+	
+	private static void registryLockServiceBeanBuilder(BeanDefinitionRegistry registry) {
+		registerInfrastructureBeanIfAbsent(registry, LockServiceBeanBuilder.BEAN_NAME,
+				LockServiceBeanBuilder.class);
 	}
 
 	/**

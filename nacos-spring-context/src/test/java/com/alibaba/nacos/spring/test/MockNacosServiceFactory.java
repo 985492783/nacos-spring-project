@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.alibaba.nacos.api.lock.LockService;
 import org.mockito.Mockito;
 
 import com.alibaba.nacos.api.config.ConfigService;
@@ -117,7 +118,12 @@ public class MockNacosServiceFactory implements NacosServiceFactory {
 		}
 		return configService;
 	}
-
+	
+	@Override
+	public LockService createLockService(Properties properties) throws NacosException {
+		return Mockito.mock(LockService.class);
+	}
+	
 	@Override
 	public NamingService createNamingService(Properties properties)
 			throws NacosException {
